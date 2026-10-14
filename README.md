@@ -1,26 +1,26 @@
-# Notes App — Java File I/O
+# NotesApp — Java File-Based Notes Manager
 
-[![Java](https://img.shields.io/badge/Java-File%20I%2FO-orange?logo=openjdk)](https://www.java.com/) [![Repository](https://img.shields.io/badge/GitHub-Source-181717?logo=github)](https://github.com/kandisaikishore/NotesApp) [![Last Commit](https://img.shields.io/github/last-commit/kandisaikishore/NotesApp)](https://github.com/kandisaikishore/NotesApp/commits/main)
+[![Java](https://img.shields.io/badge/Java-CLI-orange?logo=openjdk)](https://www.java.com/) [![Repository](https://img.shields.io/badge/GitHub-Source-181717?logo=github)](https://github.com/kandisaikishore/NotesApp)
 
-A small Java notes manager created to practise file handling, reading and writing text, and building a menu-driven console application.
+A lightweight, menu-driven Java application for creating and viewing personal notes from the terminal. Notes are appended to a local `notes.txt` file, so entries remain available between runs as long as the file is kept.
 
-## Highlights
+## Features
 
-- Create and save notes
-- Read notes stored locally
-- Practise Java file input/output and exception handling
-- Learn how a console application can work with local text files
+- Add a note through a console prompt
+- View saved notes in the terminal
+- Append notes to `notes.txt` without overwriting previous entries
+- Handle a missing notes file with a user-facing message
+- Practise Java file I/O, exception handling, loops, and console input
 
-The exact editing, deletion, and file format behaviour depends on the current implementation.
-
-## Tech stack
+## Technology
 
 - Java / JDK
-- Java file I/O (for example, readers and writers)
+- `Scanner` for console interaction
+- `FileWriter` and `BufferedReader` for file-based storage
 
-## Prerequisites
+## Requirements
 
-Install a JDK and confirm `java` and `javac` are available.
+Install a JDK and confirm that `java` and `javac` are available from your terminal.
 
 ## Run locally
 
@@ -31,23 +31,33 @@ javac NotesApp.java
 java NotesApp
 ```
 
-If your local source has additional classes or a different entry point, compile the required files and run the class containing `main`.
+Choose **1** to add a note, **2** to view saved notes, or **3** to exit. The file `notes.txt` is read or created relative to the directory from which the program is launched.
 
-## Data and privacy
+## Project structure
 
-Notes are kept in local files if file persistence is enabled by the implementation. Back up files you need to keep. This educational app should not be treated as encrypted storage for confidential information.
+```text
+NotesApp/
+├── NotesApp.java       # Console menu and file I/O
+├── NotesAppTest.java   # Test source
+├── notes.txt           # Local notes data (created as needed)
+└── README.md
+```
 
-## Possible next steps
+## Validation ideas
 
-- Add edit, delete, search, and categories
-- Include timestamps for created and updated notes
-- Improve file error handling and input validation
-- Add tests for reading, writing, and missing-file scenarios
+Check adding multiple notes, viewing an empty or populated file, restarting the application, and entering invalid menu input. The current menu parses the choice as an integer, so non-numeric input should be handled in a future improvement.
+
+## Roadmap
+
+- Validate menu input without terminating unexpectedly
+- Add search and delete functionality
+- Support note timestamps or categories
+- Add automated tests with a standard Java test framework
 
 ## Contributing
 
-Submit focused changes with clear reproduction steps and verification details.
+Open an issue with reproduction steps or submit a focused pull request with the checks you ran.
 
 ## License
 
-No license file is currently declared. Add a `LICENSE` file to define reuse terms.
+No license file is currently declared. Add a `LICENSE` file to define reuse and distribution terms.
