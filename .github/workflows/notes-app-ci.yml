@@ -1,0 +1,29 @@
+name: NotesApp Java CI
+
+on:
+  push:
+    branches: [main, "fix/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: notes-app-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Compile application and regression tests
+        run: javac -encoding UTF-8 NotesApp.java NotesAppTest.java
+      - name: Run persistence regression tests
+        run: java NotesAppTest
