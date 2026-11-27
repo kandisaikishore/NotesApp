@@ -1,31 +1,62 @@
-import java.io.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.Scanner;
 
 public class NotesApp {
     private static final String FILE_NAME = "notes.txt";
 
-    // Method to write notes (append mode)
-    public static void writeNote(String note) {
-        try (FileWriter writer = new FileWriter(FILE_NAME, true)) { // true = append mode
-            writer.write(note + System.lineSeparator());
-            System.out.println("✅ Note saved successfully!");
-        } catch (IOException e) {
-            System.out.println("❌ Error writing to file: " + e.getMessage());
+    static boolean writeNote(Path file, String note) {
+        try {
+            Files.writeString(
+                file,
+                note + System.lineSeparator(),
+                StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.WRITE,
+                StandardOpenOption.APPEND
+            );
+            return true;
+        } catch (IOException | SecurityException e) {
+            return false;
         }
     }
 
-    // Method to read all notes
+    public static void writeNote(String note) {
+        if (writeNote(Paths.get(FILE_NAME), note)) {
+            System.out.println("Note saved successfully!");
+        } else {
+            System.out.println("Error saving note. Check file access and try again.");
+        }
+    }
+
+    static List<String> readNotes(Path file) throws IOException {
+        try {
+            return Files.readAllLines(file, StandardCharsets.UTF_8);
+        } catch (NoSuchFileException e) {
+            return List.of();
+        }
+    }
+
     public static void readNotes() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
-            String line;
-            System.out.println("\n📒 Your Notes:");
-            while ((line = reader.readLine()) != null) {
-                System.out.println("- " + line);
+        try {
+            List<String> notes = readNotes(Paths.get(FILE_NAME));
+            if (notes.isEmpty()) {
+                System.out.println("No notes found yet. Please add a note first.");
+                return;
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("⚠ No notes found yet. Please add a note first.");
-        } catch (IOException e) {
-            System.out.println("❌ Error reading from file: " + e.getMessage());
+
+            System.out.println("\nYour Notes:");
+            for (String note : notes) {
+                System.out.println("- " + note);
+            }
+        } catch (IOException | SecurityException e) {
+            System.out.println("Error reading notes. The file may be unreadable or contain invalid UTF-8.");
         }
     }
 
@@ -41,7 +72,7 @@ public class NotesApp {
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -53,10 +84,10 @@ public class NotesApp {
                     readNotes();
                     break;
                 case 3:
-                    System.out.println("👋 Exiting Notes App. Goodbye!");
+                    System.out.println("Exiting Notes App. Goodbye!");
                     break;
                 default:
-                    System.out.println("❌ Invalid choice. Try again.");
+                    System.out.println("Invalid choice. Try again.");
             }
         } while (choice != 3);
 
